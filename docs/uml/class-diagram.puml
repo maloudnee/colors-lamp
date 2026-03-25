@@ -1,0 +1,55 @@
+@startuml
+title Class Diagram - COLORS LAMP 
+
+package "Frontend (JS/HTML)" {
+    class LoginUI {
+        + usernameInput
+        + passwordInput
+        + login()
+    }
+    class DashboardUI {
+        + searchInput
+        + addInput
+        + displayColors(data)
+    }
+}
+
+package "Backend (PHP API)" {
+    class LoginAPI {
+        + verifyUser()
+    }
+    class ColorAPI {
+        + addColor()
+        + searchColors()
+    }
+}
+
+package "MySQL Database" {
+    entity Users {
+        * ID : Int <<PK>>
+        --
+        * Login : String
+        * Password : String
+        * firstName : String
+        * lastName : String
+    }
+
+    entity Colors {
+        * ID : Int <<PK>>
+        --
+        * Name : String
+        * UserID : Int <<FK>>
+    }
+}
+
+Users "1" --o{Colors : owns
+
+' The UI triggers the API calls
+LoginUI ..> LoginAPI : submits credentials
+LoginAPI ..> DashboardUI : returns success (redirects)
+DashboardUI ..> ColorAPI : sends search/add requests
+
+' The API interacts with the Database
+LoginAPI --> Users : validates
+ColorAPI --> Colors : CRUD operations
+@enduml
