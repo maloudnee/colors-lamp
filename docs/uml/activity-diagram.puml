@@ -1,0 +1,38 @@
+@startuml
+title Activity Diagram - COLORS Lab (Updated)
+
+start
+
+:User opens COLORS App;
+
+partition "Authentication" {
+    :Enter Login Credentials;
+    if (Valid Credentials?) then (yes)
+        :Access Dashboard;
+    else (no)
+        :Show Error Message;
+        stop
+    endif
+}
+
+partition "Dashboard Actions" {
+    split
+        group Search Flow
+            :Input search term into Search box\n(e.g., "B");
+            :Click "Search Colors";
+            :System performs partial match;
+            :Display all colors starting with input;
+        end group
+    split again
+        group Add Flow
+            :Input color name into Add box;
+            :Click "Add Color";
+            :Save name to Database;
+            :Show "Color Added" confirmation;
+        end group
+    end split
+}
+
+:Logout;
+stop
+@enduml
